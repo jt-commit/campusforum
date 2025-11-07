@@ -32,21 +32,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-<!doctype html>
+
+
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
 <meta charset="utf-8">
 <title>Login</title>
 <link rel="stylesheet" href="styles.css">
+
+
 </head>
 <body>
-<h1>Login</h1>
-<?php foreach ($errors as $e) echo "<p class='error'>" . htmlspecialchars($e) . "</p>"; ?>
-<form method="post">
-<label>Usuário: <input name="username" required></label><br>
-<label>Senha: <input type="password" name="password" required></label><br>
-<button>Entrar</button>
-</form>
-<p><a href="index.php">Voltar</a></p>
+    <form method="post">
+<center>
+        <h1>Login</h1>
+
+        <?php foreach ($errors as $e): ?>
+            <p class="error"><?= htmlspecialchars($e) ?></p>
+        <?php endforeach; ?>
+ 
+        <label>Usuário:</label>
+        <input type="text" name="username" placeholder="Digite seu usuário" required>
+<br>
+<br>
+        <label>Senha:</label>
+        <input type="password" name="password" class="btn-novo" placeholder="Digite sua senha" required>
+<br>
+
+<br>
+        <button class="btn-novo" >Entrar</button>
+        <a href="index.php">
+<br>
+
+          <- Voltar</a>
+
+</center>
+    </form>
 </body>
 </html>
+
