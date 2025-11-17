@@ -17,7 +17,7 @@ $posts = $res->fetch_all(MYSQLI_ASSOC);
 <header>
 
 <!--Cabeçalho com logo do campusforum logoX porque é um png com fundo transparente -->
-  <img src="\campusforum\campusforumlogox.png" width="100" height="auto">
+  <img src="\campusforum\campusforumlogox.png" width="150" height="auto">
 
  
 <div class="search-box">

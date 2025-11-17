@@ -74,8 +74,8 @@ header .btn-novo:hover {
     border: none;
     outline: none;
     flex: 1;
-    font-size: 15px;
-    color: #ffffff;  
+    font-size: 20px;
+    color: #ffffffe5;  
     background-color: #000000; /* fundo preto */
     border-radius: 30px; /* cantos arredondados estilo Excel */
     padding: 10px 15px; /* dá um respiro interno */
@@ -87,7 +87,7 @@ header .btn-novo:hover {
 
  /* cor da fonte da caixa de pesquisa */
 .search-box input::placeholder {
-    color: white; 
+    color: rgba(247, 247, 247, 0.884); 
       width: 95%;
 }
 
