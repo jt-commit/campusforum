@@ -13,25 +13,60 @@ $posts = $res->fetch_all(MYSQLI_ASSOC);
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<header><h1>Campus Forum (PHP)</h1>
-<nav>
-<?php if(!empty($_SESSION['user'])): ?>
-    Olá, <?=htmlspecialchars($_SESSION['user']['username'])?> | <a href="create_post.php">Criar post</a> | <a href="logout.php">Sair</a>
-<?php else: ?>
-    <a href="login.php">Entrar</a> | <a href="register.php">Registrar</a>
-<?php endif; ?>
-</nav>
+
+<header>
+
+<!--Cabeçalho com logo do campusforum logoX porque é um png com fundo transparente -->
+  <img src="\campusforum\campusforumlogox.png" width="150" height="auto">
+
+ 
+<div class="search-box">
+  <input type="text" placeholder="Pesquisar no fórum...">
+</div>
+ <nav class="right">
+    <?php if (!empty($_SESSION['user'])): ?>
+      <span class="user">Olá, <strong><?= htmlspecialchars($_SESSION['user']['username']) ?></strong></span>
+      <a href="create_post.php" class="btn-novo">Criar Post</a>
+      <a href="logout.php" class="logout">Sair</a>
+    <?php else: ?>
+      <a href="login.php" class="btn-novo">Entrar</a>
+      <a href="register.php" class="btn-novo">Registrar</a>
+    <?php endif; ?>
+  </nav>
 </header>
-<main>
-<?php foreach($posts as $p): ?>
-<article class="post">
-  <h2><a href="post.php?id=<?= $p['id'] ?>"><?= htmlspecialchars($p['title']) ?></a></h2>
-  <p class="meta">por <?=htmlspecialchars($p['username'])?> em <?= $p['created_at'] ?></p>
-  <p><?= nl2br(htmlspecialchars(substr($p['content'],0,400))) ?><?php if(strlen($p['content'])>400) echo '...'; ?></p>
-</article>
-<?php endforeach; ?>
+
+
+
+
+    <?php foreach ($posts as $p): ?>
+      <article class="topico">
+        <div class="topico-header">
+          <img src="img/post.png" alt="Post">
+          <div>
+            <h2><a href="post.php?id=<?= $p['id'] ?>"><?= htmlspecialchars($p['title']) ?></a></h2>
+            <span class="badge">Post</span>
+          </div>
+        </div>
+        <p><?= nl2br(htmlspecialchars(substr($p['content'], 0, 400))) ?><?php if (strlen($p['content']) > 400) echo '...'; ?></p>
+
+        <div class="topico-footer">
+          <div class="autor">
+            <img src="img/user.png" alt="Autor">
+            <span><?= htmlspecialchars($p['username']) ?></span>
+          </div>
+          <div class="estatisticas">
+            <span><?= date('d/m/Y H:i', strtotime($p['created_at'])) ?></span>
+          </div>
+        </div>
+      </article>
+    <?php endforeach; ?>
+  </section>
 </main>
-<footer></footer>
+
+<footer>
+  <p>&copy; <?= date('Y') ?> Campus Forum IFPE - Igarassu</p>
+</footer>
+
 </body>
 </html>
 
