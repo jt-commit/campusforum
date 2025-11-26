@@ -2,7 +2,32 @@
 session_start();
 require 'db.php';
 $mysqli = db_connect();
-$res = $mysqli->query('SELECT p.*, u.username FROM posts p JOIN users u ON p.user_id=u.id ORDER BY p.created_at DESC');
+
+// ----- PESQUISA -----
+$search = $_GET['q'] ?? '';
+
+if (!empty($search)) {
+    $stmt = $mysqli->prepare("
+        SELECT p.*, u.username 
+        FROM posts p
+        JOIN users u ON p.user_id = u.id
+        WHERE p.title LIKE CONCAT('%', ?, '%')
+           OR p.content LIKE CONCAT('%', ?, '%')
+        ORDER BY p.created_at DESC
+    ");
+    $stmt->bind_param("ss", $search, $search);
+    $stmt->execute();
+    $res = $stmt->get_result();
+
+} else {
+    $res = $mysqli->query("
+        SELECT p.*, u.username
+        FROM posts p
+        JOIN users u ON p.user_id = u.id
+        ORDER BY p.created_at DESC
+    ");
+}
+
 $posts = $res->fetch_all(MYSQLI_ASSOC);
 ?>
 <!doctype html>
@@ -11,19 +36,63 @@ $posts = $res->fetch_all(MYSQLI_ASSOC);
 <meta charset="utf-8">
 <title>Campus Forum - Home</title>
 <link rel="stylesheet" href="styles.css">
+
+<style>
+/* =============================== */
+/*  ESTILO DA BARRA DE PESQUISA   */
+/* =============================== */
+
+.search-box form {
+  margin-left: 20px;
+}
+
+.search-box input {
+  width: 330px;                 /* tamanho parecido com o meu */
+  padding: 12px 22px;
+
+  background: #000;             /* fundo preto */
+  color: #fff;                  /* texto branco */
+
+  border: none;
+  outline: none;
+
+  border-radius: 30px;          /* formato de pílula */
+  font-size: 16px;
+
+  transition: 0.25s ease;
+}
+
+.search-box input:focus {
+  background: #111;             /* preto um pouco mais claro ao focar */
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+}
+
+.search-box input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+</style>
+
 </head>
 <body>
 
 <header>
 
-<!--Cabeçalho com logo do campusforum logoX porque é um png com fundo transparente -->
+  <!-- Logo -->
   <img src="\campusforum\campusforumlogox.png" width="150" height="auto">
 
- 
-<div class="search-box">
-  <input type="text" placeholder="Pesquisar no fórum...">
-</div>
- <nav class="right">
+  <!-- Barra de pesquisa funcional -->
+  <div class="search-box">
+    <form method="GET" action="">
+      <input 
+        type="text" 
+        name="q" 
+        placeholder="Pesquisar no fórum..."
+        value="<?= htmlspecialchars($search) ?>"
+      >
+    </form>
+  </div>
+
+  <nav class="right">
     <?php if (!empty($_SESSION['user'])): ?>
       <span class="user">Olá, <strong><?= htmlspecialchars($_SESSION['user']['username']) ?></strong></span>
       <a href="create_post.php" class="btn-novo">Criar Post</a>
@@ -33,10 +102,11 @@ $posts = $res->fetch_all(MYSQLI_ASSOC);
       <a href="register.php" class="btn-novo">Registrar</a>
     <?php endif; ?>
   </nav>
+
 </header>
 
-
-
+<main>
+  <section>
 
     <?php foreach ($posts as $p): ?>
       <article class="topico">
@@ -47,7 +117,11 @@ $posts = $res->fetch_all(MYSQLI_ASSOC);
             <span class="badge">Post</span>
           </div>
         </div>
-        <p><?= nl2br(htmlspecialchars(substr($p['content'], 0, 400))) ?><?php if (strlen($p['content']) > 400) echo '...'; ?></p>
+
+        <p>
+          <?= nl2br(htmlspecialchars(substr($p['content'], 0, 400))) ?>
+          <?php if (strlen($p['content']) > 400) echo '...'; ?>
+        </p>
 
         <div class="topico-footer">
           <div class="autor">
@@ -60,6 +134,7 @@ $posts = $res->fetch_all(MYSQLI_ASSOC);
         </div>
       </article>
     <?php endforeach; ?>
+
   </section>
 </main>
 
