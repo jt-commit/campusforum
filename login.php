@@ -4,31 +4,49 @@ require 'db.php';
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $u = trim($_POST['username'] ?? '');
-    $p = $_POST['password'] ?? '';
 
-    if ($u === '' || $p === '') {
-        $errors[] = 'Preencha usuário e senha';
+    $email = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
+
+    if ($email === '' || $password === '') {
+        $errors[] = 'Preencha todos os campos.';
     }
 
     if (empty($errors)) {
-        $mysqli = db_connect();
-        $stmt = $mysqli->prepare('SELECT id, password FROM users WHERE username=?');
-        $stmt->bind_param('s', $u);
-        $stmt->execute();
-        $stmt->bind_result($id, $hash);
 
-        if ($stmt->fetch()) {
-            if (password_verify($p, $hash)) {
-                $_SESSION['user'] = ['id' => $id, 'username' => $u];
-                header('Location: index.php');
+        $mysqli = db_connect();
+
+        // Agora usando email, já que username NÃO existe na tabela nova
+        $stmt = $mysqli->prepare("SELECT id, name, password FROM users WHERE email=?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows === 1) {
+
+            $stmt->bind_result($id, $name, $hash);
+            $stmt->fetch();
+
+            if (password_verify($password, $hash)) {
+
+                $_SESSION['user'] = [
+                    'id' => $id,
+                    'name' => $name,
+                    'email' => $email
+                ];
+
+                header("Location: index.php");
                 exit;
+
             } else {
-                $errors[] = 'Senha incorreta';
+                $errors[] = "Senha incorreta.";
             }
+
         } else {
-            $errors[] = 'Usuário não encontrado';
+            $errors[] = "E-mail não encontrado.";
         }
+
+        $stmt->close();
     }
 }
 ?>
@@ -43,8 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 body {
     margin: 0;
     font-family: "Poppins", sans-serif;
-    background-color: #1a0033; /* fundo roxo escuro */
-    color: #f9d76e; /* dourado */
+    background-color: #1a0033;
+    color: #f9d76e;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -85,8 +103,7 @@ body {
     border-radius: 30px;
     border: none;
     outline: none;
-
-    background: #000;  /* preto — igual à barra de pesquisa */
+    background: #000;
     color: #fff;
     font-size: 15px;
 }
@@ -129,7 +146,6 @@ button:hover {
     text-decoration: underline;
 }
 </style>
-
 </head>
 <body>
 
@@ -142,7 +158,7 @@ button:hover {
     <?php endforeach; ?>
 
     <form method="post">
-        <input type="text" name="username" placeholder="Digite seu usuário" required>
+        <input type="email" name="email" placeholder="Digite seu e-mail" required>
         <input type="password" name="password" placeholder="Digite sua senha" required>
 
         <button type="submit">Entrar</button>

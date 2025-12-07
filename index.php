@@ -8,7 +8,7 @@ $search = $_GET['q'] ?? '';
 
 if (!empty($search)) {
     $stmt = $mysqli->prepare("
-        SELECT p.*, u.username 
+        SELECT p.*, u.name 
         FROM posts p
         JOIN users u ON p.user_id = u.id
         WHERE p.title LIKE CONCAT('%', ?, '%')
@@ -21,14 +21,14 @@ if (!empty($search)) {
 
 } else {
     $res = $mysqli->query("
-        SELECT p.*, u.username
+        SELECT p.*, u.name
         FROM posts p
         JOIN users u ON p.user_id = u.id
         ORDER BY p.created_at DESC
     ");
 }
 
-$posts = $res->fetch_all(MYSQLI_ASSOC);
+$posts = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
 ?>
 <!doctype html>
 <html lang="pt-br">
@@ -47,28 +47,24 @@ $posts = $res->fetch_all(MYSQLI_ASSOC);
 }
 
 .search-box input {
-  width: 330px;                 /* tamanho parecido com o meu */
+  width: 330px;
   padding: 12px 22px;
-
-  background: #000;             /* fundo preto */
-  color: #fff;                  /* texto branco */
-
+  background: #000;
+  color: #fff;
   border: none;
   outline: none;
-
-  border-radius: 30px;          /* formato de pílula */
+  border-radius: 30px;
   font-size: 16px;
-
   transition: 0.25s ease;
 }
 
 .search-box input:focus {
-  background: #111;             /* preto um pouco mais claro ao focar */
+  background: #111;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
 }
 
 .search-box input::placeholder {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255,255,255,0.7);
 }
 </style>
 
@@ -78,9 +74,9 @@ $posts = $res->fetch_all(MYSQLI_ASSOC);
 <header>
 
   <!-- Logo -->
-  <img src="\campusforum\campusforumlogox.png" width="150" height="auto">
+  <img src="campusforum/campusforumlogox.png" width="150" alt="Campus Forum">
 
-  <!-- Barra de pesquisa funcional -->
+  <!-- Barra de pesquisa -->
   <div class="search-box">
     <form method="GET" action="">
       <input 
@@ -94,7 +90,7 @@ $posts = $res->fetch_all(MYSQLI_ASSOC);
 
   <nav class="right">
     <?php if (!empty($_SESSION['user'])): ?>
-      <span class="user">Olá, <strong><?= htmlspecialchars($_SESSION['user']['username']) ?></strong></span>
+      <span class="user">Olá, <strong><?= htmlspecialchars($_SESSION['user']['name']) ?></strong></span>
       <a href="create_post.php" class="btn-novo">Criar Post</a>
       <a href="logout.php" class="logout">Sair</a>
     <?php else: ?>
@@ -108,12 +104,20 @@ $posts = $res->fetch_all(MYSQLI_ASSOC);
 <main>
   <section>
 
+    <?php if (empty($posts)): ?>
+      <p style="color:white; margin-left:20px;">Nenhum post encontrado.</p>
+    <?php endif; ?>
+
     <?php foreach ($posts as $p): ?>
       <article class="topico">
         <div class="topico-header">
           <img src="img/post.png" alt="Post">
           <div>
-            <h2><a href="post.php?id=<?= $p['id'] ?>"><?= htmlspecialchars($p['title']) ?></a></h2>
+            <h2>
+              <a href="post.php?id=<?= $p['id'] ?>">
+                <?= htmlspecialchars($p['title']) ?>
+              </a>
+            </h2>
             <span class="badge">Post</span>
           </div>
         </div>
@@ -126,7 +130,7 @@ $posts = $res->fetch_all(MYSQLI_ASSOC);
         <div class="topico-footer">
           <div class="autor">
             <img src="img/user.png" alt="Autor">
-            <span><?= htmlspecialchars($p['username']) ?></span>
+            <span><?= htmlspecialchars($p['name']) ?></span>
           </div>
           <div class="estatisticas">
             <span><?= date('d/m/Y H:i', strtotime($p['created_at'])) ?></span>

@@ -4,6 +4,10 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 session_start();
 
+$conn = db_connect(); // ← IMPORTANTE
+
+$error = "";
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $name = trim($_POST['name']);
@@ -22,19 +26,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $password_hash = password_hash($password1, PASSWORD_DEFAULT);
 
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
-        $stmt->execute([$email1]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Verificar se email já existe
+        $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
+        $stmt->bind_param("s", $email1);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-        if ($result) {
+        if ($result->num_rows > 0) {
             $error = "Email já cadastrado!";
         } else {
-            $stmt = $pdo->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
-            $stmt->execute([$name, $email1, $password_hash]);
+
+            // Inserir usuário
+            $stmt = $conn->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
+            $stmt->bind_param("sss", $name, $email1, $password_hash);
+            $stmt->execute();
 
             header("Location: login.php");
             exit;
         }
+
+        $stmt->close();
     }
 }
 ?>
@@ -44,97 +55,136 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <meta charset="utf-8">
 <title>Campus Forum - Cadastro</title>
 
-<style>
-/* ======== ESTILO GERAL ======== */
+<style>/* ================================ */
+/*  ESTILO GERAL DA PÁGINA         */
+/* ================================ */
+
 body {
     margin: 0;
+    padding: 0;
     font-family: "Poppins", sans-serif;
-    background-color: #1a0033;
+    background: linear-gradient(180deg, #1a0033, #3d0073);
     color: #f9d76e;
+
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
 }
 
-/* ======== CONTAINER ======== */
+/* ================================ */
+/*  CONTAINER DO FORM              */
+/* ================================ */
+
 .form-container {
-    background: linear-gradient(180deg, #29004b, #3d0073);
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(8px);
+
     padding: 40px 50px;
-    border-radius: 18px;
     width: 380px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+
+    border-radius: 20px;
     text-align: center;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
 }
 
 .form-container h1 {
     margin-top: 0;
+    padding-bottom: 5px;
+    font-size: 28px;
     color: #f4e9ff;
-    font-size: 26px;
 }
 
-/* ======== ERRO ======== */
+/* ================================ */
+/*  CAIXA DE ERROS                 */
+/* ================================ */
+
 .error {
-    background-color: rgba(255, 50, 50, 0.25);
-    padding: 8px;
-    border-radius: 6px;
-    margin-bottom: 12px;
-    color: #ff9a9a;
+    background: rgba(255, 0, 50, 0.25);
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+
+    color: #ffb3b3;
+    font-weight: 500;
+    font-size: 14px;
 }
 
-/* ======== INPUTS ======== */
+/* ================================ */
+/*  CAMPOS DO FORM                 */
+/* ================================ */
+
 .form-container input {
     width: 100%;
-    padding: 12px 16px;
+    padding: 14px 18px;
     margin-bottom: 15px;
-    border-radius: 30px;
+
+    background: #000;
+    color: #fff;
+
     border: none;
     outline: none;
 
-    background: #000;  
-    color: #fff;
+    border-radius: 30px;
     font-size: 15px;
+
+    transition: 0.25s ease;
 }
 
 .form-container input::placeholder {
-    color: rgba(255,255,255,0.75);
+    color: rgba(255,255,255,0.7);
 }
 
-/* ======== BOTÃO ======== */
+.form-container input:focus {
+    background: #111;
+    box-shadow: 0 0 10px rgba(255,255,255,0.2);
+}
+
+/* ================================ */
+/*  BOTÃO                          */
+/* ================================ */
+
 button {
     width: 100%;
     padding: 12px;
 
     background: linear-gradient(180deg, #7c3aed, #5b21b6);
-    color: #ffffff;
+    color: #fff;
 
     border: none;
-    border-radius: 10px;
-    font-size: 16px;
+    border-radius: 12px;
+
+    font-size: 17px;
     cursor: pointer;
     font-weight: 500;
 
     transition: 0.3s ease;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.3);
 }
 
 button:hover {
-    background: linear-gradient(180deg, #9d4edd, #6a0dad);
     transform: translateY(-2px);
+    background: linear-gradient(180deg, #9d4edd, #6a0dad);
 }
 
-/* ======== LINK VOLTAR ======== */
+/* ================================ */
+/*  LINK VOLTAR                    */
+/* ================================ */
+
 .voltar {
+    display: block;
     margin-top: 15px;
-    display: inline-block;
+
     color: #d3aaff;
     text-decoration: none;
     font-size: 14px;
+
+    transition: 0.2s ease;
 }
 
 .voltar:hover {
     text-decoration: underline;
 }
+
 </style>
 
 </head>
