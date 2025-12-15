@@ -10,7 +10,7 @@ $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $name = trim($_POST['name']);
+    $username = trim($_POST['username']);
     $email1 = trim($_POST['email1']);
     $email2 = trim($_POST['email2']);
     $password1 = $_POST['password1'];
@@ -37,8 +37,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         } else {
 
             // Inserir usuário
-            $stmt = $conn->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
-            $stmt->bind_param("sss", $name, $email1, $password_hash);
+            $stmt = $conn->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
+            $stmt->bind_param("sss", $username, $email1, $password_hash);
             $stmt->execute();
 
             header("Location: login.php");
@@ -200,15 +200,15 @@ button:hover {
 
     <form method="post">
 
-        <input type="text" name="name" placeholder="Nome" required>
+        <input type="text" username="username" placeholder="Nome" required>
 
-        <input type="email" name="email1" placeholder="Email" required>
-        <input type="email" name="email2" placeholder="Confirmar Email" required>
+        <input type="email" username="email1" placeholder="Email" required>
+        <input type="email" username="email2" placeholder="Confirmar Email" required>
 
-        <input type="password" name="password1" placeholder="Senha" required>
-        <input type="password" name="password2" placeholder="Confirmar Senha" required>
+        <input type="password" username="password1" placeholder="Senha" required>
+        <input type="password" username="password2" placeholder="Confirmar Senha" required>
 
-        <button type="submit" name="register">Cadastrar</button>
+        <button type="submit" username="register">Cadastrar</button>
     </form>
 
     <a href="login.php" class="voltar">← Voltar ao login</a>

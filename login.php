@@ -16,22 +16,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $mysqli = db_connect();
 
-        // Agora usando email, já que username NÃO existe na tabela nova
-        $stmt = $mysqli->prepare("SELECT id, name, password FROM users WHERE email=?");
+        // Agora usando email, já que userusername NÃO existe na tabela nova
+        $stmt = $mysqli->prepare("SELECT id, username, password FROM users WHERE email=?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $stmt->store_result();
 
         if ($stmt->num_rows === 1) {
 
-            $stmt->bind_result($id, $name, $hash);
+            $stmt->bind_result($id, $username, $hash);
             $stmt->fetch();
 
             if (password_verify($password, $hash)) {
 
                 $_SESSION['user'] = [
                     'id' => $id,
-                    'name' => $name,
+                    'username' => $username,
                     'email' => $email
                 ];
 
@@ -158,8 +158,8 @@ button:hover {
     <?php endforeach; ?>
 
     <form method="post">
-        <input type="email" name="email" placeholder="Digite seu e-mail" required>
-        <input type="password" name="password" placeholder="Digite sua senha" required>
+        <input type="email" username="email" placeholder="Digite seu e-mail" required>
+        <input type="password" username="password" placeholder="Digite sua senha" required>
 
         <button type="submit">Entrar</button>
     </form>
