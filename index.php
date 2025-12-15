@@ -8,7 +8,7 @@ $search = $_GET['q'] ?? '';
 
 if (!empty($search)) {
     $stmt = $mysqli->prepare("
-        SELECT p.*, u.name 
+        SELECT p.*, u.username 
         FROM posts p
         JOIN users u ON p.user_id = u.id
         WHERE p.title LIKE CONCAT('%', ?, '%')
@@ -21,7 +21,7 @@ if (!empty($search)) {
 
 } else {
     $res = $mysqli->query("
-        SELECT p.*, u.name
+        SELECT p.*, u.username
         FROM posts p
         JOIN users u ON p.user_id = u.id
         ORDER BY p.created_at DESC
@@ -38,14 +38,7 @@ $posts = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
 <link rel="stylesheet" href="styles.css">
 
 <style>
-/* =============================== */
-/*  ESTILO DA BARRA DE PESQUISA   */
-/* =============================== */
-
-.search-box form {
-  margin-left: 20px;
-}
-
+.search-box form { margin-left: 20px; }
 .search-box input {
   width: 330px;
   padding: 12px 22px;
@@ -57,12 +50,10 @@ $posts = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
   font-size: 16px;
   transition: 0.25s ease;
 }
-
 .search-box input:focus {
   background: #111;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
 }
-
 .search-box input::placeholder {
   color: rgba(255,255,255,0.7);
 }
@@ -73,10 +64,8 @@ $posts = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
 
 <header>
 
-  <!-- Logo -->
-  <img src="campusforum/campusforumlogox.png" width="150" alt="Campus Forum">
+  <img src="/campusforum/campusforumlogox.png" width="150" alt="Campus Forum">
 
-  <!-- Barra de pesquisa -->
   <div class="search-box">
     <form method="GET" action="">
       <input 
@@ -90,7 +79,7 @@ $posts = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
 
   <nav class="right">
     <?php if (!empty($_SESSION['user'])): ?>
-      <span class="user">Olá, <strong><?= htmlspecialchars($_SESSION['user']['name']) ?></strong></span>
+      <span class="user">Olá, <strong><?= htmlspecialchars($_SESSION['user']['username']) ?></strong></span>
       <a href="create_post.php" class="btn-novo">Criar Post</a>
       <a href="logout.php" class="logout">Sair</a>
     <?php else: ?>
@@ -130,7 +119,7 @@ $posts = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
         <div class="topico-footer">
           <div class="autor">
             <img src="img/user.png" alt="Autor">
-            <span><?= htmlspecialchars($p['name']) ?></span>
+            <span><?= htmlspecialchars($p['username']) ?></span>
           </div>
           <div class="estatisticas">
             <span><?= date('d/m/Y H:i', strtotime($p['created_at'])) ?></span>
@@ -148,4 +137,3 @@ $posts = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
 
 </body>
 </html>
-
