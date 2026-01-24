@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'db.php';
+
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -16,22 +17,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $mysqli = db_connect();
 
-        // Agora usando email, já que userusername NÃO existe na tabela nova
-        $stmt = $mysqli->prepare("SELECT id, username, password FROM users WHERE email=?");
+        // Login por e-mail (username NÃO existe)
+        $stmt = $mysqli->prepare(
+            "SELECT id, password FROM users WHERE email = ?"
+        );
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $stmt->store_result();
 
         if ($stmt->num_rows === 1) {
 
-            $stmt->bind_result($id, $username, $hash);
+            $stmt->bind_result($id, $hash);
             $stmt->fetch();
 
             if (password_verify($password, $hash)) {
 
                 $_SESSION['user'] = [
-                    'id' => $id,
-                    'username' => $username,
+                    'id'    => $id,
                     'email' => $email
                 ];
 
@@ -54,10 +56,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="pt-br">
 <head>
 <meta charset="utf-8">
-<title>Campus Forum - Login</title>
+<title>CampusForumFX — Login</title>
 
 <style>
-/* ======== ESTILO GERAL ======== */
 body {
     margin: 0;
     font-family: "Poppins", sans-serif;
@@ -69,7 +70,6 @@ body {
     height: 100vh;
 }
 
-/* ======== CONTAINER DO LOGIN ======== */
 .login-container {
     background: linear-gradient(180deg, #29004b, #3d0073);
     padding: 40px 50px;
@@ -79,14 +79,12 @@ body {
     text-align: center;
 }
 
-/* ======== TÍTULO ======== */
 .login-container h1 {
     margin-top: 0;
     color: #f4e9ff;
     font-size: 26px;
 }
 
-/* ======== ERROS ======== */
 .error {
     background-color: rgba(255, 50, 50, 0.25);
     padding: 8px;
@@ -95,7 +93,6 @@ body {
     color: #ff9a9a;
 }
 
-/* ======== INPUTS ======== */
 .login-container input {
     width: 100%;
     padding: 12px 16px;
@@ -112,12 +109,10 @@ body {
     color: rgba(255,255,255,0.75);
 }
 
-/* ======== BOTÃO ======== */
 button {
     width: 100%;
     padding: 12px;
     border: none;
-
     background: linear-gradient(180deg, #7c3aed, #5b21b6);
     color: #ffffff;
     border-radius: 10px;
@@ -133,7 +128,6 @@ button:hover {
     transform: translateY(-2px);
 }
 
-/* ======== LINK VOLTAR ======== */
 .voltar {
     margin-top: 15px;
     display: inline-block;
@@ -158,9 +152,8 @@ button:hover {
     <?php endforeach; ?>
 
     <form method="post">
-        <input type="email" username="email" placeholder="Digite seu e-mail" required>
-        <input type="password" username="password" placeholder="Digite sua senha" required>
-
+        <input type="email" name="email" placeholder="Digite seu e-mail" required>
+        <input type="password" name="password" placeholder="Digite sua senha" required>
         <button type="submit">Entrar</button>
     </form>
 
@@ -170,4 +163,3 @@ button:hover {
 
 </body>
 </html>
-

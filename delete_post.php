@@ -1,38 +1,75 @@
 <?php
 session_start();
-require 'db.php';
+require_once 'db.php';
 
-$id = intval($_GET['id'] ?? 0);
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+if (empty($_SESSION['user'])) {
+    http_response_code(403);
+    echo "Acesso negado.";
+    exit;
+}
+
+$postId = intval($_GET['id'] ?? 0);
+
+if ($postId <= 0) {
+    http_response_code(400);
+    echo "ID inválido.";
+    exit;
+}
+
 $mysqli = db_connect();
 
-// Pegar o post
-$stmt = $mysqli->prepare('SELECT * FROM posts WHERE id=?');
-$stmt->bind_param('i', $id);
+/* =========================
+   BUSCAR POST
+========================= */
+$stmt = $mysqli->prepare(
+    "SELECT id, user_id FROM posts WHERE id = ?"
+);
+$stmt->bind_param("i", $postId);
 $stmt->execute();
-$res = $stmt->get_result();
-$post = $res->fetch_assoc();
+$result = $stmt->get_result();
+$post = $result->fetch_assoc();
+$stmt->close();
 
 if (!$post) {
     http_response_code(404);
-    echo 'Post não encontrado';
+    echo "Post não encontrado.";
     exit;
 }
 
-// Só o autor pode excluir
-if (empty($_SESSION['user']) || $_SESSION['user']['id'] !== $post['user_id']) {
+/* =========================
+   VERIFICAR AUTOR
+========================= */
+if ($_SESSION['user']['id'] !== $post['user_id']) {
     http_response_code(403);
-    echo 'Acesso negado';
+    echo "Você não tem permissão para excluir este post.";
     exit;
 }
 
-// Excluir comentários relacionados
-$mysqli->query('DELETE FROM comments WHERE post_id=' . $id);
-
-// Excluir post
-$stmt = $mysqli->prepare('DELETE FROM posts WHERE id=?');
-$stmt->bind_param('i', $id);
+/* =========================
+   EXCLUIR COMENTÁRIOS
+========================= */
+$stmt = $mysqli->prepare(
+    "DELETE FROM comments WHERE post_id = ?"
+);
+$stmt->bind_param("i", $postId);
 $stmt->execute();
+$stmt->close();
 
-header('Location: index.php');
+/* =========================
+   EXCLUIR POST
+========================= */
+$stmt = $mysqli->prepare(
+    "DELETE FROM posts WHERE id = ?"
+);
+$stmt->bind_param("i", $postId);
+$stmt->execute();
+$stmt->close();
+
+/* =========================
+   REDIRECIONAR
+========================= */
+header("Location: index.php");
 exit;
-?>
