@@ -1,75 +1,38 @@
 <?php
 session_start();
-require_once 'db.php';
+require 'db.php';
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
-if (empty($_SESSION['user'])) {
-    http_response_code(403);
-    echo "Acesso negado.";
-    exit;
-}
-
-$postId = intval($_GET['id'] ?? 0);
-
-if ($postId <= 0) {
-    http_response_code(400);
-    echo "ID inválido.";
-    exit;
-}
-
+$id = intval($_GET['id'] ?? 0);
 $mysqli = db_connect();
 
-/* =========================
-   BUSCAR POST
-========================= */
-$stmt = $mysqli->prepare(
-    "SELECT id, user_id FROM posts WHERE id = ?"
-);
-$stmt->bind_param("i", $postId);
+// Pegar o post
+$stmt = $mysqli->prepare('SELECT * FROM posts WHERE id=?');
+$stmt->bind_param('i', $id);
 $stmt->execute();
-$result = $stmt->get_result();
-$post = $result->fetch_assoc();
-$stmt->close();
+$res = $stmt->get_result();
+$post = $res->fetch_assoc();
 
 if (!$post) {
     http_response_code(404);
-    echo "Post não encontrado.";
+    echo 'Post não encontrado';
     exit;
 }
 
-/* =========================
-   VERIFICAR AUTOR
-========================= */
-if ($_SESSION['user']['id'] !== $post['user_id']) {
+// Só o autor pode excluir
+if (empty($_SESSION['user']) || $_SESSION['user']['id'] !== $post['user_id']) {
     http_response_code(403);
-    echo "Você não tem permissão para excluir este post.";
+    echo 'Acesso negado';
     exit;
 }
 
-/* =========================
-   EXCLUIR COMENTÁRIOS
-========================= */
-$stmt = $mysqli->prepare(
-    "DELETE FROM comments WHERE post_id = ?"
-);
-$stmt->bind_param("i", $postId);
-$stmt->execute();
-$stmt->close();
+// Excluir comentários relacionados
+$mysqli->query('DELETE FROM comments WHERE post_id=' . $id);
 
-/* =========================
-   EXCLUIR POST
-========================= */
-$stmt = $mysqli->prepare(
-    "DELETE FROM posts WHERE id = ?"
-);
-$stmt->bind_param("i", $postId);
+// Excluir post
+$stmt = $mysqli->prepare('DELETE FROM posts WHERE id=?');
+$stmt->bind_param('i', $id);
 $stmt->execute();
-$stmt->close();
 
-/* =========================
-   REDIRECIONAR
-========================= */
-header("Location: index.php");
+header('Location: index.php');
 exit;
+?>
