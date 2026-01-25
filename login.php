@@ -17,16 +17,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $mysqli = db_connect();
 
+<<<<<<< Updated upstream
         // Login por e-mail (username NÃO existe)
         $stmt = $mysqli->prepare(
             "SELECT id, password FROM users WHERE email = ?"
         );
+=======
+        // Agora usando email, já que userusername NÃO existe na tabela nova
+        $stmt = $mysqli->prepare("SELECT id, username, password FROM users WHERE email=?");
+>>>>>>> Stashed changes
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $stmt->store_result();
 
         if ($stmt->num_rows === 1) {
 
+<<<<<<< Updated upstream
             $stmt->bind_result($id, $hash);
             $stmt->fetch();
 
@@ -34,6 +40,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $_SESSION['user'] = [
                     'id'    => $id,
+=======
+            $stmt->bind_result($id, $username, $hash);
+            $stmt->fetch();
+
+            // Verificar se $hash não é vazio
+            if (!$hash) {
+                $errors[] = "Erro na verificação de senha. Contacte o suporte.";
+            } elseif (password_verify($password, $hash)) {
+
+                $_SESSION['user'] = [
+                    'id' => $id,
+                    'username' => $username,
+>>>>>>> Stashed changes
                     'email' => $email
                 ];
 
@@ -56,9 +75,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="pt-br">
 <head>
 <meta charset="utf-8">
+<<<<<<< Updated upstream
 <title>CampusForumFX — Login</title>
 
 <style>
+=======
+<title>Campus Forum - Login</title>
+
+<style>
+/* ======== ESTILO GERAL ======== */
+>>>>>>> Stashed changes
 body {
     margin: 0;
     font-family: "Poppins", sans-serif;
@@ -70,6 +96,10 @@ body {
     height: 100vh;
 }
 
+<<<<<<< Updated upstream
+=======
+/* ======== CONTAINER DO LOGIN ======== */
+>>>>>>> Stashed changes
 .login-container {
     background: linear-gradient(180deg, #29004b, #3d0073);
     padding: 40px 50px;
@@ -79,12 +109,20 @@ body {
     text-align: center;
 }
 
+<<<<<<< Updated upstream
+=======
+/* ======== TÍTULO ======== */
+>>>>>>> Stashed changes
 .login-container h1 {
     margin-top: 0;
     color: #f4e9ff;
     font-size: 26px;
 }
 
+<<<<<<< Updated upstream
+=======
+/* ======== ERROS ======== */
+>>>>>>> Stashed changes
 .error {
     background-color: rgba(255, 50, 50, 0.25);
     padding: 8px;
@@ -93,6 +131,10 @@ body {
     color: #ff9a9a;
 }
 
+<<<<<<< Updated upstream
+=======
+/* ======== INPUTS ======== */
+>>>>>>> Stashed changes
 .login-container input {
     width: 100%;
     padding: 12px 16px;
@@ -109,10 +151,18 @@ body {
     color: rgba(255,255,255,0.75);
 }
 
+<<<<<<< Updated upstream
+=======
+/* ======== BOTÃO ======== */
+>>>>>>> Stashed changes
 button {
     width: 100%;
     padding: 12px;
     border: none;
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
     background: linear-gradient(180deg, #7c3aed, #5b21b6);
     color: #ffffff;
     border-radius: 10px;
@@ -128,6 +178,10 @@ button:hover {
     transform: translateY(-2px);
 }
 
+<<<<<<< Updated upstream
+=======
+/* ======== LINK VOLTAR ======== */
+>>>>>>> Stashed changes
 .voltar {
     margin-top: 15px;
     display: inline-block;
@@ -154,6 +208,10 @@ button:hover {
     <form method="post">
         <input type="email" name="email" placeholder="Digite seu e-mail" required>
         <input type="password" name="password" placeholder="Digite sua senha" required>
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
         <button type="submit">Entrar</button>
     </form>
 
