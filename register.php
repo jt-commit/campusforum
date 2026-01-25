@@ -1,43 +1,59 @@
 <?php
-
+session_start();
 require_once 'db.php';
+
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
-session_start();
 
+$errors = [];
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $name = trim($_POST['name']);
-    $email1 = trim($_POST['email1']);
-    $email2 = trim($_POST['email2']);
-    $password1 = $_POST['password1'];
-    $password2 = $_POST['password2'];
+    $email1    = trim($_POST['email1'] ?? '');
+    $email2    = trim($_POST['email2'] ?? '');
+    $password1 = $_POST['password1'] ?? '';
+    $password2 = $_POST['password2'] ?? '';
 
-    // Verificação de emails
+    if ($email1 === '' || $email2 === '' || $password1 === '' || $password2 === '') {
+        $errors[] = "Preencha todos os campos.";
+    }
+
     if ($email1 !== $email2) {
-        $error = "Os emails não coincidem!";
+        $errors[] = "Os e-mails não coincidem.";
     }
-    // Verificação de senhas
-    elseif ($password1 !== $password2) {
-        $error = "As senhas não coincidem!";
+
+    if ($password1 !== $password2) {
+        $errors[] = "As senhas não coincidem.";
     }
-    else {
 
-        // Hash somente depois que elas são iguais
-        $password_hash = password_hash($password1, PASSWORD_DEFAULT);
+    if (empty($errors)) {
 
-        // Verifica se email existe
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
-        $stmt->execute([$email1]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $mysqli = db_connect();
 
-        if ($result) {
-            $error = "Email já cadastrado!";
+        // Verifica se o e-mail já existe
+        $stmt = $mysqli->prepare(
+            "SELECT id FROM users WHERE email = ?"
+        );
+        $stmt->bind_param("s", $email1);
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows > 0) {
+            $errors[] = "E-mail já cadastrado.";
+            $stmt->close();
         } else {
-            // Insere usuário novo
-            $stmt = $pdo->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
-            $stmt->execute([$name, $email1, $password_hash]);
+
+            $stmt->close();
+
+            // Cria o usuário
+            $passwordHash = password_hash($password1, PASSWORD_DEFAULT);
+
+            $stmt = $mysqli->prepare(
+                "INSERT INTO users (email, password) VALUES (?, ?)"
+            );
+            $stmt->bind_param("ss", $email1, $passwordHash);
+            $stmt->execute();
+            $stmt->close();
 
             header("Location: login.php");
             exit;
@@ -45,18 +61,118 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 ?>
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<title>CampusForumFX — Cadastro</title>
 
-<form method="post">
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(180deg, #1a0033, #3d0073);
+    color: #f9d76e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 
-    <p><input type="text" name="name" placeholder="Nome" required></p>
+.form-container {
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(8px);
+    padding: 40px 50px;
+    width: 380px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+}
 
-    <p><input type="email" name="email1" placeholder="Email" required></p>
-    <p><input type="email" name="email2" placeholder="Confirmar Email" required></p>
+.form-container h1 {
+    margin-top: 0;
+    font-size: 28px;
+    color: #f4e9ff;
+}
 
-    <p><input type="password" name="password1" placeholder="Senha" required></p>
-    <p><input type="password" name="password2" placeholder="Confirmar Senha" required></p>
+.error {
+    background: rgba(255, 0, 50, 0.25);
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    color: #ffb3b3;
+    font-weight: 500;
+    font-size: 14px;
+}
 
-    <p><button type="submit" name="register">Cadastrar</button></p>
-</form>
+.form-container input {
+    width: 100%;
+    padding: 14px 18px;
+    margin-bottom: 15px;
+    background: #000;
+    color: #fff;
+    border: none;
+    outline: none;
+    border-radius: 30px;
+    font-size: 15px;
+}
 
-<?php if (!empty($error)) echo "<p style='color:red;'>$error</p>"; ?>
+.form-container input::placeholder {
+    color: rgba(255,255,255,0.7);
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(180deg, #7c3aed, #5b21b6);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 17px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(180deg, #9d4edd, #6a0dad);
+}
+
+.voltar {
+    display: block;
+    margin-top: 15px;
+    color: #d3aaff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.voltar:hover {
+    text-decoration: underline;
+}
+</style>
+</head>
+<body>
+
+<div class="form-container">
+    <h1>Criar Conta</h1>
+
+    <?php foreach ($errors as $e): ?>
+        <p class="error"><?= htmlspecialchars($e) ?></p>
+    <?php endforeach; ?>
+
+    <form method="post">
+        <input type="email" name="email1" placeholder="E-mail" required>
+        <input type="email" name="email2" placeholder="Confirmar e-mail" required>
+
+        <input type="password" name="password1" placeholder="Senha" required>
+        <input type="password" name="password2" placeholder="Confirmar senha" required>
+
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <a href="login.php" class="voltar">← Voltar ao login</a>
+</div>
+
+</body>
+</html>
