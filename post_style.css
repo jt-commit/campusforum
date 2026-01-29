@@ -1,0 +1,201 @@
+/* ======== ESTILO DE POST - REUTILIZÁVEL ======== */
+
+/* Container principal do post */
+.post-container {
+    max-width: 900px;
+    margin: 40px auto;
+    background: linear-gradient(180deg, #6e22c3, #3c006d);
+    border-radius: 16px;
+    padding: 30px;
+    position: relative;
+    color: #ffffff;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.6), 0 4px 8px rgba(0,0,0,0.4);
+}
+
+/* Metadados do post (autor, data) */
+.post-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #ffffff;
+    margin-bottom: 15px;
+}
+
+/* Indicador de post editado */
+.post-edited {
+    font-size: 12px;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+/* Imagem do post */
+.post-image img {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+/* Ações do post (editar, excluir) */
+.post-actions {
+    margin-top: 25px;
+    border-top: 1px solid #3c006d;
+    padding-top: 15px;
+}
+
+.post-actions a {
+    color: #ffffff;
+    margin-right: 15px;
+    text-decoration: none;
+}
+
+.post-actions a:hover {
+    text-decoration: underline;
+}
+
+/* Botão de salvar post */
+.btn-save-post {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.icon-save {
+    width: 26px;
+    height: 26px;
+}
+
+.icon-save .fill {
+    fill: transparent;
+    transition: 0.2s;
+}
+
+.icon-save .stroke {
+    fill: none;
+    stroke: white;
+    stroke-width: 2;
+}
+
+.btn-save-post.saved .fill {
+    fill: white;
+}
+
+/* ======== CONTAINER DE COMENTÁRIOS ======== */
+.comments-container {
+    max-width: 900px;
+    margin: 20px auto 60px auto;
+}
+
+.comments-container h2 {
+    color: #ffffff;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+/* Formulário de comentário */
+.comments-container textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background: #0b0018;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.comments-container textarea::placeholder {
+    color: #888;
+}
+
+.comments-container button[type="submit"] {
+    margin-top: 10px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    background: #6d28d9;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.comments-container button[type="submit"]:hover {
+    background: #7c3aed;
+}
+
+/* Paragrafo de login */
+.comments-container p {
+    color: #ffffff;
+}
+
+.comments-container a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.comments-container a:hover {
+    text-decoration: underline;
+}
+
+/* Comentário individual */
+.comment {
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    background: #1b002f;
+    color: #ffffff;
+    position: relative;
+}
+
+.comment strong {
+    color: #ffffff;
+}
+
+.comment span {
+    font-size: 12px;
+    color: #ffffff;
+}
+
+.comment p {
+    margin: 6px 0;
+    line-height: 1.5;
+}
+
+.comment a {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #ffffff;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.comment a:hover {
+    color: #ffffff;
+}
+
+/* ======== TÍTULO DO POST ======== */
+.post-container h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 15px 0;
+    line-height: 1.3;
+}
+
+/* Conteúdo do post */
+.post-container > div:not(.post-meta):not(.post-edited):not(.post-image):not(.post-actions) {
+    color: #ffffff;
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+/* Mensagem de nenhum comentário */
+.comments-container > p:last-child {
+    color: #ffffff;
+    font-style: italic;
+}

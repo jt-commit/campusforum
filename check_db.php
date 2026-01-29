@@ -168,7 +168,7 @@ $mysqli->close();
                 <a href="login.php" class="btn btn-primary">Fazer Login</a>
                 <a href="register.php" class="btn btn-secondary">Cadastro</a>
             <?php else: ?>
-                <a href="create_post.php" class="btn btn-primary">Criar Post</a>
+                <a href="create_pergunta.php" class="btn btn-primary">Criar Post</a>
                 <a href="logout.php" class="btn btn-secondary">Sair</a>
             <?php endif; ?>
         </div>

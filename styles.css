@@ -1,9 +1,9 @@
 /* ======== ESTILO GERAL ======== */
 body {
     margin: 0;
-    font-family: "Poppins", sans-serif;
-    background-color: #1a0033; /* fundo roxo escuro */
-    color: #f9d76e; /* textos dourados */
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    color: #111827; /* textos escuros para fundo branco */
 }
 
 /* ======== CABEÇALHO ======== */
@@ -26,7 +26,7 @@ header h1 {
     font-size: 20px;
     font-weight: 600;
     margin: 0;
-    color: #f4e9ff;
+    color: #ffffff;
     letter-spacing: 0.5px;
 }
 
@@ -78,35 +78,43 @@ header .logout:hover {
 
 
 .search-box {
-   
     display: flex;
     align-items: center;
-    border-radius: 0px; 
-    padding: 7.1px 6.6px; 
-    width: 95%;
-    max-width: 400px; 
-    margin: 25px auto; 
-    
-} 
+    justify-content: center;
+    border-radius: 0px;
+    padding: 7.1px 6.6px;
+    width: 100%;
+    max-width: 100%;
+    margin: 25px auto;
+}
 
 .search-box input {
-    border: none;
+    border: 1px solid rgba(0,0,0,0.12);
     outline: none;
-    flex: 1;
-    font-size: 20px;
-    color: #ffffffe5;  
-    background-color: #000000; /* fundo preto */
-    border-radius: 30px; /* cantos arredondados estilo Excel */
-    padding: 10px 15px; /* dá um respiro interno */
+    flex: 0 1 100%; /* allow occupying full available width */
+    max-width: 2800px; /* doubled max width */
+    width: 100%;
+    font-size: 18px;
+    color: #111827;
+    background: linear-gradient(180deg, #ffffff, #f7f7f8);
+    border-radius: 999px; /* pílula */
+    padding: 18px 32px;
+    box-shadow: 0 2px 6px rgba(60,64,67,0.12), inset 0 1px 0 rgba(255,255,255,0.7);
+    transition: box-shadow 0.18s ease, transform 0.12s ease;
+}
+
+.search-box input:focus {
+    box-shadow: 0 6px 20px rgba(60,64,67,0.18), inset 0 1px 0 rgba(255,255,255,0.8);
+    transform: translateY(-1px);
 }
 
 
 
 
- /* cor da fonte da caixa de pesquisa */
+/* cor da fonte da caixa de pesquisa */
 .search-box input::placeholder {
-    color: rgba(247, 247, 247, 0.884); 
-      width: 95%;
+    color: rgba(17, 24, 39, 0.5);
+    width: 95%;
 }
 
 
@@ -138,7 +146,7 @@ aside {
 
 aside h3 {
     margin-top: 0;
-    color: #d3aaff;
+    color: #ffffff;
 }
 
 /* ======== CATEGORIA ITENS ======== */
@@ -211,13 +219,13 @@ button{background: linear-gradient(180deg, #7c3aed, #5b21b6);
 }
 /* ======== TÓPICOS ======== */
 .topico {
-    background-color: #120028;
+    background: linear-gradient(180deg, #6e22c3, #3c006d);
     border-radius: 16px;
     padding: 20px;
     margin-bottom: 25px;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.6), 0 4px 8px rgba(0,0,0,0.4);
     transition: 0.3s;
-    color: #f9d76e;
+    color: #ffffff;
     overflow: visible;
     display: flex;
     flex-direction: row;
@@ -270,7 +278,7 @@ button{background: linear-gradient(180deg, #7c3aed, #5b21b6);
 }
 
 .topico-header h2 a {
-    color: #ff6b6b;
+    color: #ffffff;
     text-decoration: none;
     transition: 0.3s;
 }
@@ -282,7 +290,7 @@ button{background: linear-gradient(180deg, #7c3aed, #5b21b6);
 .topico-descricao {
     margin: 0;
     font-size: 14px;
-    color: #bca7ff;
+    color: #ffffff;
     line-height: 1.5;
 }
 
@@ -290,7 +298,7 @@ button{background: linear-gradient(180deg, #7c3aed, #5b21b6);
     padding: 0;
     margin: 0;
     font-size: 14px;
-    color: #bca7ff;
+    color: #ffffff;
     line-height: 1.5;
 }
 
@@ -302,7 +310,7 @@ button{background: linear-gradient(180deg, #7c3aed, #5b21b6);
     justify-content: space-between;
     align-items: center;
     font-size: 12px;
-    color: #bca7ff;
+    color: #ffffff;
 }
 
 /* ======== BOTÃO SALVAR POST ======== */

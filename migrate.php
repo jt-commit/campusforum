@@ -20,7 +20,7 @@ try {
             echo "<div style='background:#28a745;color:white;padding:20px;border-radius:8px;margin:20px;'>";
             echo "<h2>✓ Migração Executada com Sucesso!</h2>";
             echo "<p>A coluna 'image' foi adicionada à tabela 'posts'.</p>";
-            echo "<p><a href='create_post.php' style='color:white;text-decoration:underline;'>Ir para criar post</a></p>";
+            echo "<p><a href='create_pergunta.php' style='color:white;text-decoration:underline;'>Ir para criar post</a></p>";
             echo "</div>";
         } else {
             echo "<div style='background:#dc3545;color:white;padding:20px;border-radius:8px;margin:20px;'>";
@@ -32,7 +32,7 @@ try {
         echo "<div style='background:#17a2b8;color:white;padding:20px;border-radius:8px;margin:20px;'>";
         echo "<h2>ℹ Coluna Já Existe</h2>";
         echo "<p>A coluna 'image' já foi adicionada à tabela 'posts'.</p>";
-        echo "<p><a href='create_post.php' style='color:white;text-decoration:underline;'>Ir para criar post</a></p>";
+        echo "<p><a href='create_pergunta.php' style='color:white;text-decoration:underline;'>Ir para criar post</a></p>";
         echo "</div>";
     }
     

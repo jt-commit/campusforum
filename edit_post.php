@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param('ssi', $title, $content, $id);
 
         if ($stmt->execute()) {
-            header('Location: post.php?id=' . $id);
+            header('Location: pergunta.php?id=' . $id);
             exit;
         } else {
             $errors[] = 'Erro ao atualizar o post';
@@ -176,7 +176,7 @@ button:hover {
         <button type="submit">Salvar</button>
     </form>
 
-    <a class="voltar" href="post.php?id=<?= $id ?>">← Voltar</a>
+    <a class="voltar" href="pergunta.php?id=<?= $id ?>">← Voltar</a>
 </div>
 
 </body>

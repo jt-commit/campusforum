@@ -64,8 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 body {
     margin: 0;
     font-family: "Poppins", sans-serif;
-    background-color: #1a0033;
-    color: #f9d76e;
+    background-color: #ffffff;
+    color: #111827;
     display: flex;
     justify-content: center;
     align-items: center;
