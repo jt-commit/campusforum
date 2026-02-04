@@ -182,10 +182,13 @@ $comments = $cstmt->get_result()->fetch_all(MYSQLI_ASSOC);
         <img src="/campusforum/campusforumlogox.png" width="140" alt="Campus Forum">
     </a>
 
-    <div class="search-box">
-        <form method="get" action="index.php">
+     <div class="search-box">
+        <form method="get" class="search-form">
+            <button type="submit" class="search-icon" aria-label="Pesquisar">
+                <img src="/campusforum/lupa1.png" alt="">
+            </button>
             <input type="text" name="q" placeholder="Pesquisar no fórum..."
-                   value="">
+                   value="<?= htmlspecialchars($search) ?>">
         </form>
     </div>
 

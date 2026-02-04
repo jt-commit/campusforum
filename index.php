@@ -64,7 +64,10 @@ if (!empty($_SESSION['user'])) {
     </a>
 
     <div class="search-box">
-        <form method="get">
+        <form method="get" class="search-form">
+            <button type="submit" class="search-icon" aria-label="Pesquisar">
+                <img src="/campusforum/lupa1.png" alt="">
+            </button>
             <input type="text" name="q" placeholder="Pesquisar no fórum..."
                    value="<?= htmlspecialchars($search) ?>">
         </form>

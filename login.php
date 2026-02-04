@@ -64,7 +64,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 body {
     margin: 0;
     font-family: "Poppins", sans-serif;
-    background-color: #ffffff;
+    /* Adicionada a imagem de fundo conforme solicitado */
+    background-image: url('/campusforum/fundo1.avif');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
     color: #111827;
     display: flex;
     justify-content: center;
@@ -74,6 +78,7 @@ body {
 
 /* ======== CONTAINER DO LOGIN ======== */
 .login-container {
+    /* Mantive o gradiente, mas você pode ajustar a opacidade se quiser ver mais o fundo */
     background: linear-gradient(180deg, #29004b, #3d0073);
     padding: 40px 50px;
     border-radius: 18px;
@@ -98,21 +103,23 @@ body {
     color: #ff9a9a;
 }
 
-/* ======== INPUTS ======== */
+/* ======== INPUTS (E-mail e Senha) ======== */
 .login-container input {
     width: 100%;
     padding: 12px 16px;
     margin-bottom: 15px;
     border-radius: 30px;
-    border: none;
+    border: 1px solid #ddd; /* Adicionada uma borda leve para destacar o branco */
     outline: none;
-    background: #000;
-    color: #fff;
+    background: #ffffff;    /* Mudado de #000 para branco */
+    color: #333333;         /* Texto que o usuário digita agora é escuro */
     font-size: 15px;
+    box-sizing: border-box; /* Garante que o padding não quebre a largura */
 }
 
+/* Texto de exemplo dentro da caixa (Placeholder) */
 .login-container input::placeholder {
-    color: rgba(255,255,255,0.75);
+    color: #666666;         /* Cor cinza para os textos "E-mail" e "Senha" */
 }
 
 /* ======== BOTÃO ======== */
@@ -120,7 +127,6 @@ button {
     width: 100%;
     padding: 12px;
     border: none;
-
     background: linear-gradient(180deg, #7c3aed, #5b21b6);
     color: #ffffff;
     border-radius: 10px;
@@ -148,6 +154,8 @@ button:hover {
 .voltar:hover {
     text-decoration: underline;
 }
+
+
 </style>
 </head>
 <body>

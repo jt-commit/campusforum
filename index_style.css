@@ -9,7 +9,11 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #ffffff;
+    background-color: #fff4f6; /* tom branco-rosado (fallback) */
+    background-image: url('uploads/fundo1.avif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     color: #111827;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
@@ -49,25 +53,51 @@ header .search-box {
     display: flex;
 }
 
+/* estilo do formulário interno para posicionar o botão da lupa */
+.search-form{ position: relative; width: 100%; }
+
+.search-form .search-icon{
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.search-form .search-icon img{ width: 18px; height: 18px; display: block; }
+
 /* make the header search fill the available header space */
 header .search-box input {
     flex: 1 1 auto;
     width: 100%;
     max-width: none;
-        padding: 18px 32px; /* padding remains unchanged */
-        max-width: 2800px; /* doubled centered max width */
+        padding: 18px 32px 18px 48px; /* espaço extra à esquerda para o ícone */
+            max-width: 2800px; /* doubled centered max width */
     border-radius: 999px;
-    border: 1px solid rgba(0,0,0,0.12);
-    background: linear-gradient(180deg, #ffffff, #f7f7f8);
+    border: 1px solid rgba(17,24,39,0.06);
+    background: linear-gradient(180deg, #fff4f6, #fff1f3); /* tom branco-rosado */
     color: #111827;
     font-size: 18px;
-    box-shadow: 0 2px 6px rgba(60,64,67,0.12), inset 0 1px 0 rgba(255,255,255,0.7);
+    box-shadow: 0 2px 6px rgba(17,24,39,0.06), inset 0 1px 0 rgba(255,255,255,0.6);
     transition: box-shadow 0.18s ease, transform 0.12s ease;
 }
 
 header .search-box input:focus {
     box-shadow: 0 6px 20px rgba(60,64,67,0.18), inset 0 1px 0 rgba(255,255,255,0.8);
     transform: translateY(-1px);
+}
+
+/* melhora de contraste do ícone quando o input está em foco */
+header .search-box input:focus {
+    background-position: 18px center, center;
 }
 
 header .search-box input::placeholder {

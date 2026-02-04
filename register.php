@@ -58,29 +58,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <meta charset="utf-8">
 <title>Campus Forum - Cadastro</title>
 
-<style>/* ================================ */
-/*  ESTILO GERAL DA PÁGINA         */
-/* ================================ */
-
+<style>/* ======== FUNDO DA PÁGINA ======== */
 body {
     margin: 0;
-    padding: 0;
     font-family: "Poppins", sans-serif;
-    background: linear-gradient(180deg, #1a0033, #3d0073);
-    color: #f9d76e;
-
+    background-image: url('/campusforum/fundo1.avif');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
 }
 
-/* ================================ */
-/*  CONTAINER DO FORM              */
-/* ================================ */
-
+/* ======== CONTAINER DO FORM (MANTIDO ROXO) ======== */
 .form-container {
-    background: rgba(0, 0, 0, 0.35);
+    /* Mantendo o tom roxo escuro com leve transparência */
+    background: rgba(41, 0, 75, 0.85); 
     backdrop-filter: blur(8px);
 
     padding: 40px 50px;
@@ -98,69 +93,54 @@ body {
     color: #f4e9ff;
 }
 
-/* ================================ */
-/*  CAIXA DE ERROS                 */
-/* ================================ */
-
+/* ======== CAIXA DE ERROS ======== */
 .error {
     background: rgba(255, 0, 50, 0.25);
     padding: 10px 14px;
     border-radius: 10px;
     margin-bottom: 15px;
-
     color: #ffb3b3;
     font-weight: 500;
     font-size: 14px;
 }
 
-/* ================================ */
-/*  CAMPOS DO FORM                 */
-/* ================================ */
-
+/* ======== CAMPOS DO FORM (BRANCOS) ======== */
 .form-container input {
     width: 100%;
     padding: 14px 18px;
     margin-bottom: 15px;
 
-    background: #000;
-    color: #fff;
+    background: #ffffff; /* Fundo branco solicitado */
+    color: #222222;    /* Texto digitado escuro para contraste */
 
     border: none;
     outline: none;
-
     border-radius: 30px;
     font-size: 15px;
-
     transition: 0.25s ease;
+    box-sizing: border-box;
 }
 
 .form-container input::placeholder {
-    color: rgba(255,255,255,0.7);
+    color: #777777; /* Cor do texto "e-mail" e "senha" */
 }
 
 .form-container input:focus {
-    background: #111;
-    box-shadow: 0 0 10px rgba(255,255,255,0.2);
+    background: #fdfdfd;
+    box-shadow: 0 0 10px rgba(255,255,255,0.3);
 }
 
-/* ================================ */
-/*  BOTÃO                          */
-/* ================================ */
-
+/* ======== BOTÃO ======== */
 button {
     width: 100%;
     padding: 12px;
-
     background: linear-gradient(180deg, #7c3aed, #5b21b6);
     color: #fff;
-
     border: none;
     border-radius: 12px;
-
     font-size: 17px;
     cursor: pointer;
     font-weight: 500;
-
     transition: 0.3s ease;
 }
 
@@ -169,24 +149,20 @@ button:hover {
     background: linear-gradient(180deg, #9d4edd, #6a0dad);
 }
 
-/* ================================ */
-/*  LINK VOLTAR                    */
-/* ================================ */
-
+/* ======== LINK VOLTAR ======== */
 .voltar {
     display: block;
     margin-top: 15px;
-
     color: #d3aaff;
     text-decoration: none;
     font-size: 14px;
-
     transition: 0.2s ease;
 }
 
 .voltar:hover {
     text-decoration: underline;
 }
+
 
 </style>
 
