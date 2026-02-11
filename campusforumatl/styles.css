@@ -2,8 +2,8 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #ffffff;
-    color: #111827; /* textos escuros para fundo branco */
+    background-color: #1a0d2e;
+    color: #e0d5f0; /* textos claros para fundo roxo azulado */
 }
 
 /* ======== CABEÇALHO ======== */

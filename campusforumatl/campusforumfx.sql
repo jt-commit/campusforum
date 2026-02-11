@@ -24,6 +24,12 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+CREATE DATABASE IF NOT EXISTS campusforumatl
+  DEFAULT CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+USE campusforumatl;
+
 -- Estrutura para tabela `comments`
 --
 
@@ -199,3 +205,5 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+ALTER TABLE users ADD avatar VARCHAR(255) DEFAULT NULL;
